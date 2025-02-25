@@ -8,34 +8,64 @@ import QuizQuestion from "./screens/quizz";
 import QNA from "./screens/question";
 import FillInTheGaps from "./screens/fillgaps";
 import Challenges from "./screens/challenges";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-// Simulated Pokemon data
-const pokemonData = [
-  { name: "Pikachu", type: "Electric", description: "A mouse-like Pokemon that can generate electricity." },
-  { name: "Charizard", type: "Fire/Flying", description: "A dragon-like Pokemon that breathes fire." },
-  { name: "Bulbasaur", type: "Grass/Poison", description: "A plant-like Pokemon with a bulb on its back." },
-  { name: "Squirtle", type: "Water", description: "A turtle-like Pokemon that can shoot water." },
-  { name: "Mewtwo", type: "Psychic", description: "A powerful, genetically engineered Pokemon." },
-]
 
 const App= () => {
   return (
-   <Router>
-      <Routes>
-          <Route path="/" element={<HomePage />} /> 
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} /> 
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/edit-profile" element={< EditProfile/>} />
-          <Route path="/quizz" element={< QuizQuestion/>} />
-          <Route path="/qna" element={< QNA/>} />
-          <Route path="/words" element={< FillInTheGaps/>} />
-          <Route path="/challenges" element={< Challenges/>} />
-
-          {/* <Route path="/profile" element={<Profile />} /> */}
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/profile" element={<ProtectedRoute> <ProfilePage /> </ProtectedRoute>} />
+          <Route 
+            path="/edit-profile" 
+            element={
+            <ProtectedRoute>
+              <EditProfile />
+            </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/quizz" 
+            element={
+            <ProtectedRoute>
+              <QuizQuestion />
+            </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/qna" 
+            element={
+            <ProtectedRoute>
+              <QNA />
+            </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/words" 
+            element={
+            <ProtectedRoute>
+              <FillInTheGaps />
+            </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/challenges" 
+            element={
+            <ProtectedRoute>
+              <Challenges />
+            </ProtectedRoute>
+            } 
+          />
+          
         </Routes>
-   </Router>
-  )
+      </Router>
+    </AuthProvider>
+  );
 }
 
 export default App

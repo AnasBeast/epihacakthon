@@ -1,11 +1,11 @@
 import React from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 function HomePage() {
-    const navigate = useNavigate();
   return (
-    <div className="bg-blue-100 flex flex-col items-center justify-center">
+    <div className="bg-blue-100 min-h-screen flex flex-col items-center justify-center">
       {/* Header */}
       <Header />
 
@@ -13,9 +13,12 @@ function HomePage() {
       <section className="text-center mt-24">
         <h2 className="text-4xl font-extrabold text-blue-700">Welcome to KIDOAI Tutor! 🚀</h2>
         <p className="text-lg text-gray-700 mt-2">Learn, Play, and Have Fun with AI-powered lessons!</p>
-        <button onClick={()=>navigate("/challenges")} className="mt-4 px-6 py-3 bg-yellow-500 text-white rounded-lg text-xl shadow-md hover:bg-yellow-600">
+        <button className="mt-4 px-6 py-3 bg-yellow-500 text-white rounded-lg text-xl shadow-md hover:bg-yellow-600">
+        <Link to="/challenges" >
           Start Learning
+        </Link>
         </button>
+        
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe8TPVDfiXHE6Jnkw8i5OpagamJvPME4NmgA&s" alt="AI Mascot" className="mt-6 w-40 mx-auto"/>
       </section>
 
