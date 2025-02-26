@@ -193,10 +193,6 @@ const extractJSON = (text) => {
   return match ? JSON.parse(match[1].trim()) : null;
 };
 const testApi = async (req, res) => {
-  const { prompt } = req.body;
-  const openai = new OpenAI({
-    apiKey:process.env.api_key,
-  });
 
   const token = process.env.api_token;
 
@@ -207,12 +203,12 @@ const testApi = async (req, res) => {
   try {
     const response = await client.chat.completions.create({
       messages: [
-        { role: "system", content: "" },
         {
-          role: "user",
+          role: "system",
           content:
-            "give me quiz to learn spanish ,give 2 question and put them in an array parsable to directly work with it,I want the options in an array of objects that each one contains id,text and isCorrect boolean.Don't repeat same questions",
+            "You are a language teacher, you have to create a quiz for students. Give 1 question in spanish and put it in an array parsable to directly work with it and it's options in an array of objects that each one contains id(number),text and isCorrect boolean.Don't repeat same questions.",
         },
+       
       ],
       model: "gpt-4o",
       temperature: 0.5,
@@ -229,11 +225,7 @@ const testApi = async (req, res) => {
   }
 };
 const listenApi = async (req, res) => {
-  const { prompt } = req.body;
-  const openai = new OpenAI({
-    apiKey:process.env.api_key,
-  });
-
+ 
   const token = process.env.api_token;
 
   const client = new OpenAI({
@@ -243,15 +235,14 @@ const listenApi = async (req, res) => {
   try {
     const response = await client.chat.completions.create({
       messages: [
-        { role: "system", content: "" },
         {
-          role: "user",
+          role: "system",
           content:
-            "give a short sentence in english maximum 8 words ",
+            "You are a language teacher, you have to create some sentences for students. Give a short sentence in english maximum 8 words.",
         },
       ],
       model: "gpt-4o",
-      temperature: 1,
+      temperature: 0.5,
       max_tokens: 4096,
       top_p: 1,
     });

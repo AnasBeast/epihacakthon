@@ -14,7 +14,6 @@ const ProfilePage = () => {
     };
     fetchUser();
   }, []);
-
   return (
     <>
       <Header />
@@ -47,11 +46,10 @@ const ProfilePage = () => {
                 <div className="flex gap-4 mt-4 justify-center items-center">
                   Answers :
                   <div className="bg-blue-100 text-green-700 px-4 py-2 rounded-full font-semibold">
-                    {user.answers?.filter((answer) => !answer.isvalid).length}{" "}
-                    ✅
+                    {user.answers?.filter((answer) => answer.isValid).length} ✅
                   </div>
                   <div className="bg-blue-100 text-red-700 px-4 py-2 rounded-full font-semibold">
-                    {user.answers?.filter((answer) => answer.isvalid).length} ❌
+                    {user.answers?.filter((answer) => !answer.isValid).length} ❌
                   </div>
                 </div>
                 <Link
