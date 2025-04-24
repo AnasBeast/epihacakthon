@@ -5,12 +5,15 @@ import { motion } from "framer-motion"
 import { useForm } from "react-hook-form"
 import Header from "../components/header"
 import Footer from "../components/footer"
+import axios from "axios"
+import { useAuth } from "../context/AuthContext"
 
 
 const EditProfile = () => {
   const [imagePreview, setImagePreview] = useState(null)
   const [error, setError] = useState("");
   const [isError, setIsError] = useState(false);
+  const { user } = useAuth();
 
   const {
     register,
@@ -20,48 +23,60 @@ const EditProfile = () => {
   const passverif=useRef("")
   const nameRef = useRef("")
   const passRef=useRef("")
-  const onSubmit = async(data) => {
-    console.log(data)
-    try{
-        console.log(passverif.current.value)
-
-        const res = await fetch("http://localhost:3030/user/verifypassword", {
-            method: "PUT",
+  const onSubmit = async (data) => {
+    try {
+      // Verify the recent password
+      if (passverif.current.value) {
+        const verifyResponse = await axios.put(
+          `${process.env.REACT_APP_API_URL}/user/verifyPassword`,
+          { password: passverif.current.value }, // Pass the password in the body
+          {
             headers: {
-                authorization: "Bearer " + localStorage.getItem("token"),
-                headers: { "Content-Type": "application/json" },
-  
+              authorization: "Bearer " + localStorage.getItem("token"),
             },
-            body: JSON.stringify({ password: passverif.current.value }),
-          });
-          const data = await res.json();          
-        if(data.error){
-            setError(res.data.error);
-            setIsError(true);
+          }
+        );
+  
+        if (verifyResponse.data.error) {
+          setError(verifyResponse.data.error);
+          setIsError(true);
+          return;
         }
-        else{
-            const newData={
-                name:nameRef.current.value,
-                password:passRef.current.value
-            }
-            const res = await fetch("http://localhost:3030/user/editprofile", {
-                method: "PUT",
-                headers: {
-                  authorization: "Bearer " + localStorage.getItem("token"),
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newData),
-              });
-              
-              const data = await res.json();
-            setError("");
-            setIsError(false);
+      }
+  
+      // Prepare the new data
+      const newData = {
+        name: data.name || undefined, // Use the value from react-hook-form
+        password: passRef.current.value || undefined, // Only include password if provided
+      };
+  
+      // Remove undefined fields
+      Object.keys(newData).forEach((key) => {
+        if (newData[key] === undefined) {
+          delete newData[key];
         }
-    }catch(error){
-        setError("Error updating profile");
-        setIsError(true);
+      });
+  
+      // Update the profile
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/user/editProfile`,
+        newData, // Pass the new data in the body
+        {
+          headers: {
+            authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+  
+      setError("");
+      setIsError(false);
+      console.log("Profile updated successfully!");
+    } catch (err) {
+      console.error(err);
+      setError("An error occurred while updating the profile.");
+      setIsError(true);
     }
-  }
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0]
@@ -102,47 +117,47 @@ const EditProfile = () => {
                 {...register("name", { required: "Name is required" })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 type="text"
-                
+                value={user.name}
                 id="name"
                 />
                 {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
             </motion.div>
-            <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}>
-                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="password">
+            { !user.googleId &&
+            <>
+              <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}>
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="password">
                 Recent Password
-                </label>
-                <input
+              </label>
+              <input
                 ref={passverif}
                 {...register("password", {
-                    required: "Password is required",
-                    minLength: { value: 8, message: "Password must be at least 8 characters" },
+                  minLength: { value: 8, message: "Password must be at least 8 characters" }, // Keep minLength validation if needed
                 })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 type="password"
                 id="password"
-                />
-                
-                {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
+              />
+              {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
             </motion.div>
+
             <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}>
-            <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="password">
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="new-password">
                 New Password
-                </label>
-                <input 
+              </label>
+              <input
                 ref={passRef}
                 {...register("new password", {
-                    required: "Password is required",
-                    minLength: { value: 8, message: "Password must be at least 8 characters" },
+                  minLength: { value: 8, message: "Password must be at least 8 characters" }, // Keep minLength validation if needed
                 })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 type="password"
                 id="new-password"
-                />
-                {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
+              />
+              {errors["new password"] && <p className="mt-1 text-sm text-red-600">{errors["new password"].message}</p>}
             </motion.div>
-            
-            
-            
+            </>
+            }
+
             <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

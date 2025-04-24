@@ -4,6 +4,10 @@ import { motion } from "framer-motion";
 import Modal from "../components/modal";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import OauthLogin from "../components/googleLogin";
+import axios from "axios";
+import Header from "../components/header";
+
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,32 +20,35 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Simulated API call
-    try {
-      const response = await fetch("http://localhost:3030/user/login", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+
+    await axios.put(`${process.env.REACT_APP_API_URL}/user/login`, {
+        email,
+        password,
+      })
+      .then(async (response) => {
+        console.log(response.data);
+        setApiResult(response.data.message);
+        localStorage.setItem("token", response.data.user.token);
+        await verifyUser();
+        setIsModalOpen(true);
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error("Error during login:", error);
+        setApiResult("Error occurred during login");
+        setIsModalOpen(true);
       });
-      const data = await response.json();
-      console.log("User logged in successfully:", data);
-      setApiResult(data.message);
-      localStorage.setItem("token", data.user.token);
-      await verifyUser();
-      setIsModalOpen(true);
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
-    } catch (error) {
-      setApiResult("Error occurred during login");
-      setIsModalOpen(true);
-    }
   };
 
   return (
+    <>
+    <Header title="Login" />
     <div className="bg-blue-100 min-h-screen flex justify-center items-center">
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 bg-white rounded-md w-1/2 md:w-[400px] md:h-[600px] mx-auto p-10"
+        className="space-y-4 bg-white rounded-md w-1/2 md:w-[400px] mx-auto p-10"
       >
         <img src="/logo.png" alt="logo" className="mx-auto w-full" />
         <motion.div
@@ -94,6 +101,7 @@ const LoginForm = () => {
         >
           Log in
         </motion.button>
+        <OauthLogin/>
       </form>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <pre className="bg-gray-100 p-4 rounded overflow-x-auto">
@@ -101,6 +109,8 @@ const LoginForm = () => {
         </pre>
       </Modal>
     </div>
+    </>
+
   );
 };
 

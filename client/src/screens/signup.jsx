@@ -3,6 +3,8 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import Modal from "../components/modal"
 import { useNavigate } from "react-router";
+import Header from "../components/header";
+import OauthLogin from "../components/googleLogin";
 const Signup = () => {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -37,8 +39,10 @@ const Signup = () => {
   }
 
   return (
+    <>
+    <Header title="Signup" />
     <div className="bg-blue-100 min-h-screen flex justify-center items-center">
-    <form onSubmit={handleSubmit} className="space-y-4 bg-white rounded-md w-1/2 md:w-[400px] md:h-[600px] mx-auto p-10">
+    <form onSubmit={handleSubmit} className="space-y-4 bg-white rounded-md w-1/2 md:w-[400px] mx-auto p-10">
         <img src="/logo.png" alt="logo" className="mx-auto w-3/4" />
         <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -90,11 +94,14 @@ const Signup = () => {
         >
           Sign up
         </motion.button>
+        <OauthLogin/>
+        
       </form>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <pre className="bg-gray-100 p-4 rounded overflow-x-auto">{apiResult}</pre>
     </Modal>
     </div>
+    </>
   )
 }
 

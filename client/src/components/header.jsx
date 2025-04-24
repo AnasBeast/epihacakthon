@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const Header = () => {
+const Header = ({title}) => {
   const { user, verifyUser, logout } = useAuth();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  document.title = title || "KIDOAI Tutor";
 
   useEffect(() => {
     const fetchUser = async () => {

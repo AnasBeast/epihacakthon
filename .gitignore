@@ -5,6 +5,7 @@ client/node_modules
 client/.env
 server/node_modules
 server/.env
+DataSet
 /.pnp
 .pnp.js
 

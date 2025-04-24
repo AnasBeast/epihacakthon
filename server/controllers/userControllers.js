@@ -2,6 +2,8 @@ const User = require("../database/userModel.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const OpenAI = require("openai"); // CommonJS require instead of import
+const { OAuth2Client } = require('google-auth-library');
+
 function generateToken(user) {
   const jwt_secret = process.env.JWT_SECRET;
   return jwt.sign({ id: user._id }, jwt_secret, { expiresIn: 3600 });
@@ -19,6 +21,7 @@ const getUser = async (req, res) => {
         difficulty: user.difficulty,
         score: user.score,
         answers: user.answers,
+        googleId: user.googleId || null, 
       },
     });
   } catch (error) {
@@ -172,22 +175,34 @@ const updateProfile = async (req, res) => {
   try {
     const { id } = req.user;
     const { password, name } = req.body;
+
+    // Find the user by ID
     const user = await User.findById({ _id: id });
     if (!user) {
       return res.status(400).json({ message: "Profile not updated" });
     }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    newUser = {
-      name: name || user.name,
-      password: hashedPassword || user.password,
+
+    // Prepare the updated fields
+    const updatedFields = {
+      name: name || user.name, // Use the provided name or keep the existing one
     };
-    await User.findByIdAndUpdate({ _id: id }, { $set: newUser });
-    return res.status(200).json({ message: "Profile updated", newUser });
+
+    // If a new password is provided, hash it and include it in the update
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      updatedFields.password = hashedPassword;
+    }
+
+    // Update the user in the database
+    await User.findByIdAndUpdate({ _id: id }, { $set: updatedFields });
+
+    return res.status(200).json({ message: "Profile updated", updatedFields });
   } catch (error) {
     res.status(500).json({ error: "true", message: error.message });
   }
 };
+
 const extractJSON = (text) => {
   const match = text.match(/```json([\s\S]*?)```/);
   return match ? JSON.parse(match[1].trim()) : null;
@@ -256,6 +271,44 @@ const listenApi = async (req, res) => {
   }
 }
 
+const verifyOauth = async (req, res) => {
+  const { token } = req.body;
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const { email, name, sub } = ticket.getPayload(); // 'sub' is Google user ID
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = await User.create({
+        email,
+        name,
+        googleId: sub,
+        difficulty: 'easy', // required default field
+      });
+    }
+
+    //  generate JWT
+    const authToken = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({ message: 'User authenticated', token: authToken, user });
+
+  } catch (error) {
+    console.error("OAuth error:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getUser,
   regUser,
@@ -266,5 +319,6 @@ module.exports = {
   getAllUsers,
   verifyPasssword,
   testApi,
+  verifyOauth,
   listenApi,
 };

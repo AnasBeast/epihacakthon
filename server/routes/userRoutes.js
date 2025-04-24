@@ -11,6 +11,7 @@ const {
   getAllUsers,
   verifyPasssword,
   testApi,
+  verifyOauth,
   listenApi,
 } = require("../controllers/userControllers");
 router.get("/dashboard", getAllUsers);
@@ -19,8 +20,9 @@ router.put("/login", loginUser);
 router.get("/profile", protect, getUser);
 router.post("/submit", protect, addAnswer);
 router.get("/answers/:id", protect, getAnswers);
-router.put("/update", protect, updateProfile);
-router.put("/verifypassword", protect,verifyPasssword);
+router.put("/editProfile", protect, updateProfile);
+router.put("/verifyPassword", protect,verifyPasssword);
 router.get("/getAiQuizz",testApi);
-router.get("/sound",listenApi)
+router.post("/auth/google",verifyOauth)
+router.get("/sound",listenApi);
 module.exports = router;

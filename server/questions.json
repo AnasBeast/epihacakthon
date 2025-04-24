@@ -1,0 +1,252 @@
+[
+  {
+    "question": "What is the basic unit of electricity?",
+    "options": [
+      {
+        "id": 1,
+        "text": "Ampere",
+        "isCorrect": false
+      },
+      {
+        "id": 2,
+        "text": "Volt",
+        "isCorrect": false
+      },
+      {
+        "id": 3,
+        "text": "Ohm",
+        "isCorrect": false
+      },
+      {
+        "id": 4,
+        "text": "Coulomb",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "question": "Who was the first president of the United States?",
+    "options": [
+      {
+        "id": 1,
+        "text": "George Washington",
+        "isCorrect": true
+      },
+      {
+        "id": 2,
+        "text": "Thomas Jefferson",
+        "isCorrect": false
+      },
+      {
+        "id": 3,
+        "text": "Abraham Lincoln",
+        "isCorrect": false
+      },
+      {
+        "id": 4,
+        "text": "John Adams",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "question": "In what year was the Eiffel Tower built?",
+    "options": [
+      {
+        "id": 1,
+        "text": "1789",
+        "isCorrect": false
+      },
+      {
+        "id": 2,
+        "text": "1889",
+        "isCorrect": true
+      },
+      {
+        "id": 3,
+        "text": "1939",
+        "isCorrect": false
+      },
+      {
+        "id": 4,
+        "text": "1989",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "question": "What is the chemical symbol for gold?",
+    "options": [
+      {
+        "id": 1,
+        "text": "Ag",
+        "isCorrect": false
+      },
+      {
+        "id": 2,
+        "text": "Au",
+        "isCorrect": true
+      },
+      {
+        "id": 3,
+        "text": "Fe",
+        "isCorrect": false
+      },
+      {
+        "id": 4,
+        "text": "Pt",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "question": "Who wrote 'To Kill a Mockingbird'?",
+    "options": [
+      {
+        "id": 1,
+        "text": "Mark Twain",
+        "isCorrect": false
+      },
+      {
+        "id": 2,
+        "text": "F. Scott Fitzgerald",
+        "isCorrect": false
+      },
+      {
+        "id": 3,
+        "text": "Ernest Hemingway",
+        "isCorrect": false
+      },
+      {
+        "id": 4,
+        "text": "Harper Lee",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "question": "What is the chemical symbol for oxygen?",
+    "options": [
+      {
+        "id": 1,
+        "text": "H2O",
+        "isCorrect": false
+      },
+      {
+        "id": 2,
+        "text": "NaCl",
+        "isCorrect": false
+      },
+      {
+        "id": 3,
+        "text": "O2",
+        "isCorrect": true
+      },
+      {
+        "id": 4,
+        "text": "CO2",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "question": "What is the smallest country in the world?",
+    "options": [
+      {
+        "id": 1,
+        "text": "France",
+        "isCorrect": false
+      },
+      {
+        "id": 2,
+        "text": "Vatican City",
+        "isCorrect": false
+      },
+      {
+        "id": 3,
+        "text": "Monaco",
+        "isCorrect": true
+      },
+      {
+        "id": 4,
+        "text": "Spain",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "question": "What is the chemical symbol for carbon?",
+    "options": [
+      {
+        "id": 1,
+        "text": "Ca",
+        "isCorrect": false
+      },
+      {
+        "id": 2,
+        "text": "Fe",
+        "isCorrect": false
+      },
+      {
+        "id": 3,
+        "text": "C",
+        "isCorrect": true
+      },
+      {
+        "id": 4,
+        "text": "H",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "question": "What is the longest river in Africa?",
+    "options": [
+      {
+        "id": 1,
+        "text": "Nile",
+        "isCorrect": true
+      },
+      {
+        "id": 2,
+        "text": "Congo",
+        "isCorrect": false
+      },
+      {
+        "id": 3,
+        "text": "Zambezi",
+        "isCorrect": false
+      },
+      {
+        "id": 4,
+        "text": "Amazon",
+        "isCorrect": false
+      }
+    ]
+  },
+  {
+    "question": "Who painted the Mona Lisa?",
+    "options": [
+      {
+        "id": 1,
+        "text": "Leonardo da Vinci",
+        "isCorrect": true
+      },
+      {
+        "id": 2,
+        "text": "Pablo Picasso",
+        "isCorrect": false
+      },
+      {
+        "id": 3,
+        "text": "Claude Monet",
+        "isCorrect": false
+      },
+      {
+        "id": 4,
+        "text": "Vincent van Gogh",
+        "isCorrect": false
+      }
+    ]
+  }
+]
